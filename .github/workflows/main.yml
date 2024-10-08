@@ -36,7 +36,7 @@ jobs:
 
       # Step 5: Wait for Spring Boot
       - name: Wait for Spring Boot to start
-        run: sleep 4
+        run: sleep 30
 
       # Step 6: Set up Node.js
       - name: Set up Node.js
@@ -63,13 +63,20 @@ jobs:
             https://api.getpostman.com/environments/${{ secrets.POST_ENVIRONMENT }} \
             --output Postman/environment.json
 
-      # Step 10: Run Postman Collection
+      # Step 10: Install Newman + HTML Report
+      - name: Install Newman and HTML reporter
+        run: npm install -g newman newman-reporter-html
+
+      # Step 11: Run Postman Collection
       - name: Run API Tests
         run: |
-          postman collection run Postman/collection.json \
-          --environment Postman/environment.json
+          mkdir -p newman
+          newman run Postman/collection.json \
+          --environment Postman/environment.json \
+          --reporters cli,html \
+          --reporter-html-export newman/report.html
 
-      # Step 11: Save reports
+      # Step 12: Save HTML reports
       - name: Saving execution reports
         uses: actions/upload-artifact@v3
         if: always()
