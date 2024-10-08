@@ -36,7 +36,7 @@ jobs:
 
       # Step 5: Wait for Spring Boot
       - name: Wait for Spring Boot to start
-        run: sleep 30
+        run: sleep 7
 
       # Step 6: Set up Node.js
       - name: Set up Node.js
@@ -51,7 +51,7 @@ jobs:
 
       # Step 8: Login to Postman CLI
       - name: Login to Postman CLI
-        run: postman login --api-key ${{ secrets.POST_SECRECT }}
+        run: postman login --with-api-key ${{ secrets.POST_SECRECT }}
 
       # Step 9: Run Postman Collection via CLI
       - name: Run API Tests
