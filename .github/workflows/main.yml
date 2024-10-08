@@ -22,7 +22,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build with Gradle (create .jar)
+      - name: Build Gradle
         run: ./gradlew clean bootJar
 
       - name: Save Spring Boot Jar
