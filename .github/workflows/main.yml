@@ -45,17 +45,16 @@ jobs:
           node-version: '16'
 
       # Step 7: Install Newman
-      - name: Install Newman
-        run: npm install -g newman
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli-pstmn.io/install/linux64.64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POST_SECRECT }}
 
       # Step 8: Run Newman
-      - name: Run Postman Collection
+      - name: Run API Tests
         run: |
-          mkdir -p newman
-          newman run ./Postman/user-tests.postman_collection.json \
-            --environment ./Postman/url.postman_environment.json \
-            --reporters cli,json,html \
-            --reporter-json-export newman/report.html
+          postman collection run "33013225-ce6b7fbd-95c7-446b-b7b5-18752f73f311"
 
       # Step 9: Save reports
       - name: Saving execution reports
