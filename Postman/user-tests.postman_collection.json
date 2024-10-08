@@ -7,40 +7,92 @@
 	},
 	"item": [
 		{
-			"name": "Articles",
+			"name": "User",
 			"item": [
 				{
-					"name": "Delete article by slug",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
+					"name": "Login",
 					"request": {
-						"method": "DELETE",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"user\": {\r\n  \"email\": \"{{user_1E}}\",\r\n  \"password\": \"{{user_1P}}\"\r\n}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{base_url}}/articles/serge",
+							"raw": "{{base_url}}/users/login",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"articles",
-								"serge"
+								"users",
+								"login"
 							]
 						}
 					},
 					"response": []
 				},
+				{
+					"name": "Valid Registration Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"user\": {\r\n  \"username\": \"{{$randomUserName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"{{$randomPassword}}\"\r\n}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Test user ",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"user\": {\r\n  \"username\": \"{{user_1N}}\",\r\n  \"email\": \"{{user_1E}}\",\r\n  \"password\": \"{{user_1P}}\"\r\n}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Articles",
+			"item": [
 				{
 					"name": "Create Article",
 					"event": [
@@ -80,6 +132,32 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"article\": {\r\n    \"title\": \"serge\",\r\n    \"description\": \"Test\",\r\n    \"body\": \"helllloooo\",\r\n    \"tagList\": [\"tag1\", \"tag2\"]\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/articles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create article 2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"article\": {\r\n    \"title\": \"deleter\",\r\n    \"description\": \"Test\",\r\n    \"body\": \"helllloooo\",\r\n    \"tagList\": [\"tag1\", \"tag2\"]\r\n  }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -189,13 +267,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/articles/serge",
+							"raw": "{{base_url}}/articles/deleter",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"articles",
-								"serge"
+								"deleter"
 							]
 						}
 					},
@@ -215,7 +293,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"article\": {\r\n    \"title\": \"Batman\",\r\n    \"description\": \"modif\",\r\n    \"body\": \"modif\",\r\n    \"tagList\": [\"tag1\", \"tag2\"]\r\n  }\r\n}",
+							"raw": "{\r\n  \"article\": {\r\n    \"title\": \"serge\",\r\n    \"description\": \"modif\",\r\n    \"body\": \"modif\",\r\n    \"tagList\": [\"tag1\", \"tag2\"]\r\n  }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -223,13 +301,45 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/articles/Batman",
+							"raw": "{{base_url}}/articles/serge",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"articles",
-								"Batman"
+								"serge"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete article by slug",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/articles/deleter",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"articles",
+								"deleter"
 							]
 						}
 					},
@@ -317,90 +427,6 @@
 							],
 							"path": [
 								"tags"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "Login",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"user\": {\r\n  \"email\": \"{{user_1E}}\",\r\n  \"password\": \"{{user_1P}}\"\r\n}}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/users/login",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"users",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Valid Registration Request",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"user\": {\r\n  \"username\": \"{{$randomUserName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"password\": \"{{$randomPassword}}\"\r\n}}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/users",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Test user ",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"user\": {\r\n  \"username\": \"{{user_1N}}\",\r\n  \"email\": \"{{user_1E}}\",\r\n  \"password\": \"{{user_1P}}\"\r\n}}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/users",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"users"
 							]
 						}
 					},
