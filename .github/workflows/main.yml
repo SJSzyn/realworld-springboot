@@ -31,5 +31,5 @@ jobs:
       - name: Run Postman Collection
         run: |
           newman run /Postman/url.postman_environment.json \
-            --environment /Postman/User tests.postman_collection.json \
+            --environment /Postman/user-tests.postman_collection.json \
             --reporters cli,html
