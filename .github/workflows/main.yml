@@ -36,7 +36,7 @@ jobs:
 
       # Step 5: Wait for Spring Boot
       - name: Wait for Spring Boot to start
-        run: sleep 7
+        run: sleep 4
 
       # Step 6: Set up Node.js
       - name: Set up Node.js
@@ -51,15 +51,25 @@ jobs:
 
       # Step 8: Login to Postman CLI
       - name: Login to Postman CLI
-        run: postman login --with-api-key ${{ secrets.POST_SECRECT }}
+        run: postman login --api-key ${{ secrets.POST_SECRECT }}
 
-      # Step 9: Run Postman Collection via CLI
+      # Step 9: Fetch Collection and Environment
+      - name: Download Postman Collection and Environment
+        run: |
+          curl --header "X-Api-Key: ${{ secrets.POST_SECRECT }}" \
+            https://api.getpostman.com/collections/${{ secrets.POST_COLLECTION }} \
+            --output Postman/collection.json
+          curl --header "X-Api-Key: ${{ secrets.POST_SECRECT }}" \
+            https://api.getpostman.com/environments/${{ secrets.POST_ENVIRONMENT }} \
+            --output Postman/environment.json
+
+      # Step 10: Run Postman Collection
       - name: Run API Tests
         run: |
-          postman collection run "33013225-d627df5f-6fa0-444b-a73f-b9edeff3a3d8" \
-          --environment ./Postman/url.postman_environment.json
+          postman collection run Postman/collection.json \
+          --environment Postman/environment.json
 
-      # Step 10: Save reports
+      # Step 11: Save reports
       - name: Saving execution reports
         uses: actions/upload-artifact@v3
         if: always()
