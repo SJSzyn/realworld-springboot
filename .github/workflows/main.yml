@@ -1,4 +1,4 @@
-name: Run Postman Tests
+name: CI Pipeline
 
 on:
   push:
@@ -9,25 +9,44 @@ on:
       - master
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout your repository
+      # Step 1: Checkout your repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js environment
+      # Step 2: Set up JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Step 3: Build Spring Boot Project
+      - name: Build with Maven
+        run: ./mvnw clean install
+
+      # Step 4: Run Spring Boot
+      - name: Start Spring Boot
+        run: ./mvnw spring-boot:run &
+
+      # Step 5: SLEEP
+      - name: Wait for Spring Boot to start
+        run: sleep 30
+
+      # Step 6: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
 
-      # Step 3: Install Newman
+      # Step 7: Install Newman
       - name: Install Newman
         run: npm install -g newman
 
-      # Step 4: Run Newman with your Postman collection and generate report
+      # Step 8: Run Newman
       - name: Run Postman Collection
         run: |
           mkdir -p newman
@@ -36,7 +55,7 @@ jobs:
             --reporters cli,json \
             --reporter-json-export newman/report.json
 
-      # Step 5: Save reports
+      # Step 9: Save reports
       - name: Saving execution reports
         uses: actions/upload-artifact@v3
         if: always()
