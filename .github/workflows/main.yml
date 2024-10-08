@@ -30,6 +30,15 @@ jobs:
       # Step 4: Run Newman with your Postman collection
       - name: Run Postman Collection
         run: |
-          newman run /Postman/url.postman_environment.json \
-            --environment /Postman/user-tests.postman_collection.json \
+          newman run ./Postman/user-tests.postman_collection.json \
+            --environment ./Postman/url.postman_environment.json \
             --reporters cli,html
+            --reporter-html-export newman/newman-run-report.html
+
+      # Step 5: Upload Newman HTML Report
+      - name: Upload Newman HTML Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: newman-html-report
+          path: newman/newman-run-report.html
