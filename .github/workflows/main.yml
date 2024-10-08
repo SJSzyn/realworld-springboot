@@ -30,6 +30,6 @@ jobs:
       # Step 4: Run Newman with your Postman collection
       - name: Run Postman Collection
         run: |
-          newman run ./Postman/url.postman_environment.json \
-            --environment ./Postman/User tests.postman_collection.json \
+          newman run /Postman/url.postman_environment.json \
+            --environment /Postman/User tests.postman_collection.json \
             --reporters cli,html
