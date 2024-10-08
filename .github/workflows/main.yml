@@ -22,21 +22,35 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build Gradle
+      - name: Build with Gradle (create .jar)
         run: ./gradlew clean bootJar
 
-      - name: Save Spring Boot Jar
+      - name: Import GPG key
+        run: |
+          echo "$GPG_KEY" | gpg --batch --import
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_KEY }}
+
+      - name: Sign jar
+        run: |
+          gpg --batch --yes --passphrase "$GPG_PASS" --armor --output build/libs/app.jar.sig --detach-sig build/libs/*.jar
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASS }}
+
+      - name: Save Spring Boot Jar & signature
         uses: actions/upload-artifact@v3
         with:
           name: spring-boot-application
-          path: build/libs/*.jar
+          path: |
+            build/libs/*.jar
+            build/libs/app.jar.sig
 
       - name: Boot Spring Boot
         run: ./gradlew bootRun &
         env:
           SPRING_PROFILES_ACTIVE: test
 
-      - name: Set up Node.js
+      - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -45,7 +59,7 @@ jobs:
         run: |
           curl -L https://dl-cli.pstmn.io/install/linux64.sh | sh
 
-      - name: Login into Postman CLI
+      - name: Login to Postman CLI
         run: postman login --with-api-key ${{ secrets.POST_SECRECT }}
 
       - name: Download Postman Collection & Environment
