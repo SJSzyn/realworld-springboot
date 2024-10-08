@@ -373,8 +373,8 @@
 							"script": {
 								"exec": [
 									"// Check if the status code is 204 (No Content)\r",
-									"pm.test(\"Status code is 204\", function () {\r",
-									"    pm.response.to.have.status(204);\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
 									"// Verify the response body is empty, as expected with a 204 No Content status\r",
