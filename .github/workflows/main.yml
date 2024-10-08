@@ -24,15 +24,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Step 3: Build Spring Boot Project
+      # Step 3: Build Spring Boot project with Gradle
       - name: Build with Gradle
-        run: ./gradle clean install
+        run: ./gradlew clean build
 
       # Step 4: Run Spring Boot
       - name: Start Spring Boot
-        run: ./gradle spring-boot:run &
+        run: ./gradlew bootRun &
+        env:
+          SPRING_PROFILES_ACTIVE: test # Use a specific profile if needed
 
-      # Step 5: SLEEP
+      # Step 5: Wait for Spring Boot
       - name: Wait for Spring Boot to start
         run: sleep 30
 
