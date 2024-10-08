@@ -16,14 +16,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build Gradle
-        run: ./gradlew clean build
+      - name: Build with Gradle (create .jar)
+        run: ./gradlew clean bootJar
+
+      - name: Save Spring Boot Jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: spring-boot-application
+          path: build/libs/*.jar
 
       - name: Boot Spring Boot
         run: ./gradlew bootRun &
