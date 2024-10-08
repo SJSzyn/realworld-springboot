@@ -25,12 +25,12 @@ jobs:
           java-version: '17'
 
       # Step 3: Build Spring Boot Project
-      - name: Build with Maven
-        run: ./mvnw clean install
+      - name: Build with Gradle
+        run: ./gradle clean install
 
       # Step 4: Run Spring Boot
       - name: Start Spring Boot
-        run: ./mvnw spring-boot:run &
+        run: ./gradle spring-boot:run &
 
       # Step 5: SLEEP
       - name: Wait for Spring Boot to start
