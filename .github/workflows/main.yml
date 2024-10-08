@@ -27,13 +27,13 @@ jobs:
 
       - name: Import GPG key
         run: |
-          echo "$GPG_KEY" | gpg --batch --import
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_KEY }}
 
       - name: Sign jar
         run: |
-          gpg --batch --yes --passphrase "$GPG_PASS" --armor --output build/libs/app.jar.sig --detach-sig build/libs/*.jar
+          gpg --batch --yes --passphrase "$GPG_PASSPHRASE" --armor --output build/libs/app.jar.sig --detach-sig build/libs/*.jar
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASS }}
 
