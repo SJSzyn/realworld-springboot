@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -13,48 +13,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: JDK 17
-      - name: Set up JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # Step 3: Build Gradle
-      - name: Build with Gradle
+      - name: Build Gradle
         run: ./gradlew clean build
 
-      # Step 4: Run Spring Boot
-      - name: Start Spring Boot
+      - name: Boot Spring Boot
         run: ./gradlew bootRun &
         env:
           SPRING_PROFILES_ACTIVE: test
 
-      # Step 5: Wait for Spring Boot
       - name: Wait for Spring Boot to start
         run: sleep 5
 
-      # Step 6: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
 
-      # Step 7: Install Postman CLI
       - name: Install Postman CLI
         run: |
           curl -L https://dl-cli.pstmn.io/install/linux64.sh | sh
 
-      # Step 8: Login to Postman CLI
-      - name: Login to Postman CLI
+      - name: Login into Postman CLI
         run: postman login --with-api-key ${{ secrets.POST_SECRECT }}
 
-      # Step 9: Fetch Collection and Environment
-      - name: Download Postman Collection and Environment
+      - name: Download Postman Collection & Environment
         run: |
           curl --header "X-Api-Key: ${{ secrets.POST_SECRECT }}" \
             https://api.getpostman.com/collections/${{ secrets.POST_COLLECTION }} \
@@ -63,11 +54,9 @@ jobs:
             https://api.getpostman.com/environments/${{ secrets.POST_ENVIRONMENT }} \
             --output Postman/environment.json
 
-      # Step 10: Install Newman + HTML Report
-      - name: Install Newman and HTML reporter
+      - name: Install Newman & HTML report
         run: npm install -g newman newman-reporter-html
 
-      # Step 11: Run Postman Collection
       - name: Run API Tests
         run: |
           mkdir -p newman
@@ -76,8 +65,7 @@ jobs:
           --reporters cli,html \
           --reporter-html-export newman/report.html
 
-      # Step 12: Save HTML reports
-      - name: Saving execution reports
+      - name: Save report
         uses: actions/upload-artifact@v3
         if: always()
         with:
