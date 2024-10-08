@@ -27,23 +27,8 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
 
-      # Step 4 html rapport download
-      - name: ensure that the reporter is installed in the same directory as newman
-        run: npm install newman-reporter-html
-
-      # Step 5: Run Newman with your Postman collection
+      # Step 4: Run Newman with your Postman collection
       - name: Run Postman Collection
         run: |
-          mkdir -p newman
           newman run ./Postman/user-tests.postman_collection.json \
             --environment ./Postman/url.postman_environment.json \
-            --reporters cli,html
-            --reporter-html-export newman/newman-run-report.html
-
-      # Step 6: Upload Newman HTML Report
-      - name: Upload Newman HTML Report
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: newman-html-report
-          path: newman/newman-run-report.html
