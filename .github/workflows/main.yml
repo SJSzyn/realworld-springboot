@@ -32,3 +32,12 @@ jobs:
         run: |
           newman run ./Postman/user-tests.postman_collection.json \
             --environment ./Postman/url.postman_environment.json \
+
+      # Step 5: Save reports
+      - name: Saving execution reports
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: newman-execution-report
+          path: newman/
+          retention-days: 30
