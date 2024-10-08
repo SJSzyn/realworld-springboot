@@ -27,11 +27,14 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
 
-      # Step 4: Run Newman with your Postman collection
+      # Step 4: Run Newman with your Postman collection and generate report
       - name: Run Postman Collection
         run: |
+          mkdir -p newman
           newman run ./Postman/user-tests.postman_collection.json \
             --environment ./Postman/url.postman_environment.json \
+            --reporters cli,json \
+            --reporter-json-export newman/report.json
 
       # Step 5: Save reports
       - name: Saving execution reports
@@ -39,5 +42,5 @@ jobs:
         if: always()
         with:
           name: newman-execution-report
-          path: newman/
+          path: newman/report.json
           retention-days: 30
